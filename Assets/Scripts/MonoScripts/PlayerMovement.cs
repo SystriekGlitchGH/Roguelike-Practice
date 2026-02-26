@@ -68,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         if(ctx.performed)
         {
-            //RaycastHit2D hit = Physics2D.BoxCast(new Vector2(transform.position.x,transform.position.y+attackDistance), attackSize, attackAngle, Vector2.zero);
             RaycastHit2D hit = MakeBoxCastAttack();
             if (hit && hit.collider.TryGetComponent(out EnemyMovement enemy))
             {
@@ -110,23 +109,12 @@ public class PlayerMovement : MonoBehaviour
     }
     private RaycastHit2D MakeBoxCastAttack()
     {
-        if(playerDirection == Direction.North)
-            return Physics2D.BoxCast(new Vector2(transform.position.x,transform.position.y+attackDistance), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.South)
-            return Physics2D.BoxCast(new Vector2(transform.position.x,transform.position.y-attackDistance), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.East)
-            return Physics2D.BoxCast(new Vector2(transform.position.x+attackDistance,transform.position.y), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.West)
-            return Physics2D.BoxCast(new Vector2(transform.position.x-attackDistance,transform.position.y), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.NorthEast)
-            return Physics2D.BoxCast(new Vector2(transform.position.x+Mathf.Sqrt(attackDistance),transform.position.y+Mathf.Sqrt(attackDistance)), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.NorthWest)
-            return Physics2D.BoxCast(new Vector2(transform.position.x-Mathf.Sqrt(attackDistance),transform.position.y+Mathf.Sqrt(attackDistance)), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.SouthEast)
-            return Physics2D.BoxCast(new Vector2(transform.position.x+Mathf.Sqrt(attackDistance),transform.position.y-Mathf.Sqrt(attackDistance)), attackSize, attackAngle, Vector2.zero);
-        if(playerDirection == Direction.SouthWest)
-            return Physics2D.BoxCast(new Vector2(transform.position.x-Mathf.Sqrt(attackDistance),transform.position.y-Mathf.Sqrt(attackDistance)), attackSize, attackAngle, Vector2.zero);
-        return Physics2D.BoxCast(new Vector2(transform.position.x,transform.position.y), attackSize, attackAngle, Vector2.zero);
+        Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
+        //Debug.Log(angleAsVector);
+
+        Vector2 position = angleAsVector * attackDistance;
+
+		return Physics2D.BoxCast(transform.position + (Vector3)position, attackSize, attackAngle, Vector2.zero);
     }
     private void OnDrawGizmos()
     {   

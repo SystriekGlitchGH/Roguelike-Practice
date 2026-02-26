@@ -36,15 +36,6 @@ public class EnemyMovement : MonoBehaviour
                 target = null;
                 rb2d.linearDamping = friction;
             }
-            
-        }
-        
-    }
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            target = collision.GetComponent<PlayerMovement>();
         }
     }
     public void Die()
