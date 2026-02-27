@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 1321258597}
   - component: {fileID: 1321258599}
   - component: {fileID: 1321258598}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: EnemySSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,7 +525,7 @@ MonoBehaviour:
   target: {fileID: 0}
   rb2d: {fileID: 1391124467}
   acceleration: 5
-  topSpeed: 2
+  topSpeed: 5
   friction: 6
 --- !u!50 &1391124467
 Rigidbody2D:
@@ -625,7 +625,7 @@ MonoBehaviour:
   friction: 6
   attackSize: {x: 2.5, y: 3}
   attackDistance: 3
-  knockback: 2
+  knockback: 10
   boxLayer:
     serializedVersion: 2
     m_Bits: 64
