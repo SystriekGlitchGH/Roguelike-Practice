@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     //variables for attack size
     public Vector2 attackSize;
     public float attackDistance;
+    public float knockback;
+    public LayerMask boxLayer;
 
     [Header("Debugging Tools")]
     [SerializeField] Transform anchorTransform;
@@ -69,10 +71,10 @@ public class PlayerMovement : MonoBehaviour
         if(ctx.performed)
         {
             RaycastHit2D hit = MakeBoxCastAttack();
-            if (hit && hit.collider.TryGetComponent(out EnemyMovement enemy))
+            if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
             {
                 Debug.Log("attack succesful");
-                //enemy.Die();
+                enemy.Hit(transform.position,knockback);
             }
         }
     }
@@ -114,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 position = angleAsVector * attackDistance;
 
-		return Physics2D.BoxCast(transform.position + (Vector3)position, attackSize, attackAngle, Vector2.zero);
+		return Physics2D.BoxCast(transform.position + (Vector3)position, attackSize, attackAngle, Vector2.zero,0,boxLayer);
     }
     private void OnDrawGizmos()
     {   

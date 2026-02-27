@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 1321258597}
   - component: {fileID: 1321258599}
   - component: {fileID: 1321258598}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemySSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 1391124467}
   - component: {fileID: 1391124463}
   - component: {fileID: 1391124466}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemyS
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   rb2d: {fileID: 1391124467}
-  acceleration: 0
+  acceleration: 5
   topSpeed: 2
   friction: 6
 --- !u!50 &1391124467
@@ -625,6 +625,10 @@ MonoBehaviour:
   friction: 6
   attackSize: {x: 2.5, y: 3}
   attackDistance: 3
+  knockback: 2
+  boxLayer:
+    serializedVersion: 2
+    m_Bits: 64
   anchorTransform: {fileID: 1562601945}
 --- !u!70 &1595963280
 CapsuleCollider2D:

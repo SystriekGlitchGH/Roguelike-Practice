@@ -23,7 +23,8 @@ public class EnemyMovement : MonoBehaviour
             distance = PlayerDistance(target.transform.position);
             if(distance > 2)
             {
-                rb2d.AddForce(PlayerDirection(target.transform.position) * acceleration);
+                Vector2 newVelocity = PlayerDirection(target.transform.position)*acceleration;
+                rb2d.AddForce(newVelocity);
                 Vector2 velocity = Vector2.ClampMagnitude(new(rb2d.linearVelocity.x, rb2d.linearVelocity.y), topSpeed);
                 rb2d.linearVelocity = velocity;
             }
@@ -41,6 +42,10 @@ public class EnemyMovement : MonoBehaviour
     public void Die()
     {
         Destroy(gameObject);
+    }
+    public void Hit(Vector2 playerPos, float knockback)
+    {
+        rb2d.AddForce(-PlayerDirection(playerPos)*knockback,ForceMode2D.Impulse);
     }
 
     //movement help methods
