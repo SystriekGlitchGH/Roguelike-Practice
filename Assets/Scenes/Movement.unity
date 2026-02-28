@@ -524,9 +524,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   rb2d: {fileID: 1391124467}
-  acceleration: 5
-  topSpeed: 5
+  acceleration: 40
+  topSpeed: 2
   friction: 6
+  knockbackTime: 0.2
 --- !u!50 &1391124467
 Rigidbody2D:
   serializedVersion: 5
@@ -620,9 +621,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2d: {fileID: 1595963281}
   spriteRend: {fileID: 1595963282}
-  acceleration: 80
+  acceleration: 90
   topSpeed: 10
-  friction: 6
+  friction: 8
   attackSize: {x: 2.5, y: 3}
   attackDistance: 3
   knockback: 10
