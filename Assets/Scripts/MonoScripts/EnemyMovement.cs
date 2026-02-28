@@ -59,7 +59,7 @@ public class EnemyMovement : MonoBehaviour
     public void Hit(Vector2 playerPos, float knockback)
     {
         StartCoroutine(Knockback());
-        rb2d.AddForce(-PlayerDirection(playerPos)*knockback,ForceMode2D.Impulse);
+        rb2d.AddForce(target.DirectionToVector()*knockback,ForceMode2D.Impulse);
     }
 
     private IEnumerator Knockback()

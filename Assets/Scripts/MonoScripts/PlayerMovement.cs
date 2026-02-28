@@ -109,6 +109,18 @@ public class PlayerMovement : MonoBehaviour
         //southwest
         if(directionX < 0 && directionY < 0) playerDirection = Direction.SouthWest;
     }
+    public Vector2 DirectionToVector()
+    {
+        if(playerDirection == Direction.North) return new Vector2(0,1);
+        if(playerDirection == Direction.South) return new Vector2(0,-1);
+        if(playerDirection == Direction.East) return new Vector2(1,0);
+        if(playerDirection == Direction.West) return new Vector2(-1,0);
+        if(playerDirection == Direction.NorthEast) return new Vector2(0.7071f,0.7071f);
+        if(playerDirection == Direction.NorthWest) return new Vector2(-0.7071f,0.7071f);
+        if(playerDirection == Direction.SouthEast) return new Vector2(0.7071f,-0.7071f);
+        if(playerDirection == Direction.SouthWest) return new Vector2(-0.7071f,-0.7071f);
+        return new Vector2(0,0);
+    }
     private RaycastHit2D MakeBoxCastAttack()
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
