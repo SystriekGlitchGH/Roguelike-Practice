@@ -620,6 +620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d649d81a40879447837619df24b9f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackVisual: {fileID: 3956911121127704462, guid: aa4d57817d690fa4397252751d838b91, type: 3}
   rb2d: {fileID: 1595963281}
   spriteRend: {fileID: 1595963282}
   acceleration: 90

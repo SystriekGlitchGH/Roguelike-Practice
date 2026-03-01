@@ -1,10 +1,14 @@
 using System.Collections;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //Non-Permenant components
+    [SerializeField] GameObject attackVisual;
+
     [Header("Components")]
     [SerializeField] Rigidbody2D rb2d;
     [SerializeField] SpriteRenderer spriteRend;
@@ -57,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
     {
         FindDirection();
         FindAngle();
+        anchorTransform.eulerAngles = new Vector3(0,0,attackAngle);
     }
     public void Move(InputAction.CallbackContext ctx)
     {
@@ -72,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
         if(ctx.performed)
         {
             RaycastHit2D hit = MakeBoxCastAttack();
-            
             StartCoroutine(Attack());
             if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
             {
@@ -135,12 +139,18 @@ public class PlayerMovement : MonoBehaviour
     }
     private IEnumerator Attack()
     {
+        // all this code is purely for visual during presentation, will be replaced with animator sprites
+        Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
+        Vector2 position = angleAsVector * attackDistance;
+        GameObject attack = Instantiate(attackVisual, transform.position + (Vector3)position, anchorTransform.rotation, anchorTransform);
+        attack.transform.localScale = attackSize;
+        
         yield return new WaitForSeconds(0.1f);
+        Destroy(attack);
     }
     private void OnDrawGizmos()
     {   
         Gizmos.matrix = anchorTransform.localToWorldMatrix;
-        anchorTransform.eulerAngles = new Vector3(0,0,attackAngle);
         Gizmos.DrawWireCube(new Vector2(0,attackDistance), attackSize);
         
     }
