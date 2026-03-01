@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -71,10 +72,12 @@ public class PlayerMovement : MonoBehaviour
         if(ctx.performed)
         {
             RaycastHit2D hit = MakeBoxCastAttack();
+            
+            StartCoroutine(Attack());
             if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
             {
                 Debug.Log("attack succesful");
-                enemy.Hit(transform.position,knockback);
+                enemy.Hit(this, knockback);
             }
         }
     }
@@ -129,6 +132,10 @@ public class PlayerMovement : MonoBehaviour
         Vector2 position = angleAsVector * attackDistance;
 
 		return Physics2D.BoxCast(transform.position + (Vector3)position, attackSize, attackAngle, Vector2.zero,0,boxLayer);
+    }
+    private IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(0.1f);
     }
     private void OnDrawGizmos()
     {   

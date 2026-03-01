@@ -8,7 +8,8 @@ public class EnemyMovement : MonoBehaviour
     public PlayerMovement target;
     [Header("Components")]
     [SerializeField] Rigidbody2D rb2d;
-    public Enemy1 enemy;
+    [SerializeField] SpriteRenderer spriteRend;
+    [SerializeField] Enemy1 enemy;
 
     [Header("Movement Stats")]
     public float acceleration;
@@ -56,16 +57,18 @@ public class EnemyMovement : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    public void Hit(Vector2 playerPos, float knockback)
+    public void Hit(PlayerMovement attacker, float knockback)
     {
-        StartCoroutine(Knockback());
-        rb2d.AddForce(target.DirectionToVector()*knockback,ForceMode2D.Impulse);
+        StartCoroutine(GetHit());
+        rb2d.AddForce(attacker.DirectionToVector()*knockback,ForceMode2D.Impulse);
     }
 
-    private IEnumerator Knockback()
+    private IEnumerator GetHit()
     {
         hasKnockback = true;
+        spriteRend.color = new Color32(150,0,0,255);
         yield return new WaitForSeconds(knockbackTime);
+        spriteRend.color = new Color32(90,215,0,255);
         hasKnockback = false;
     }
 
