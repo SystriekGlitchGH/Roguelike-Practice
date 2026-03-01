@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject attackVisual;
 
     [Header("Components")]
-    [SerializeField] Rigidbody2D rb2d;
+    public Rigidbody2D rb2d;
     [SerializeField] SpriteRenderer spriteRend;
 
     [Header("Movement stats")]
@@ -27,7 +27,9 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 attackSize;
     public float attackDistance;
     public float knockback;
+    public float attackSpeed;
     public LayerMask boxLayer;
+    private bool canAttack = true;
 
     [Header("Debugging Tools")]
     [SerializeField] Transform anchorTransform;
@@ -74,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(ctx.ReadValue<float>() == 0)
             return;
-        if(ctx.performed)
+        if(ctx.performed && canAttack)
         {
             RaycastHit2D hit = MakeBoxCastAttack();
             StartCoroutine(Attack());
@@ -139,14 +141,18 @@ public class PlayerMovement : MonoBehaviour
     }
     private IEnumerator Attack()
     {
-        // all this code is purely for visual during presentation, will be replaced with animator sprites
+        canAttack = false;
+        // all this code is purely for visual during presentation, will be replaced with animator sprites from here
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
         Vector2 position = angleAsVector * attackDistance;
         GameObject attack = Instantiate(attackVisual, transform.position + (Vector3)position, anchorTransform.rotation, anchorTransform);
         attack.transform.localScale = attackSize;
+        // to here
         
         yield return new WaitForSeconds(0.1f);
         Destroy(attack);
+        yield return new WaitForSeconds(2/attackSpeed-0.1f);
+        canAttack = true;
     }
     private void OnDrawGizmos()
     {   

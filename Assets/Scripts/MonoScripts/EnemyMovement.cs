@@ -20,6 +20,9 @@ public class EnemyMovement : MonoBehaviour
     private bool hasKnockback;
     public float knockbackTime;
 
+    //other
+    private float colliderPushForce = 4;
+
     private void Start()
     {
         rb2d.linearDamping = friction;
@@ -51,6 +54,14 @@ public class EnemyMovement : MonoBehaviour
                 target = null;
                 rb2d.linearDamping = friction;
             }
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            PlayerMovement pm = collision.GetComponent<PlayerMovement>();
+            pm.rb2d.AddForce(-pm.DirectionToVector()*colliderPushForce);
         }
     }
     public void Die()

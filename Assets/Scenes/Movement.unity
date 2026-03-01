@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 1321258597}
   - component: {fileID: 1321258599}
   - component: {fileID: 1321258598}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemySSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 1595963280}
   - component: {fileID: 1595963279}
   - component: {fileID: 1595963284}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -629,6 +629,7 @@ MonoBehaviour:
   attackSize: {x: 2.5, y: 3}
   attackDistance: 3
   knockback: 10
+  attackSpeed: 6
   boxLayer:
     serializedVersion: 2
     m_Bits: 64
