@@ -658,10 +658,8 @@ MonoBehaviour:
   acceleration: 90
   topSpeed: 10
   friction: 8
-  attackSize: {x: 2.5, y: 3}
-  attackDistance: 3
-  knockback: 10
-  attackSpeed: 6
+  weaponName: sword
+  weaponType: blade
   boxLayer:
     serializedVersion: 2
     m_Bits: 64

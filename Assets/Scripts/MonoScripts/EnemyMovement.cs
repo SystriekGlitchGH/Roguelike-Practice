@@ -31,7 +31,6 @@ public class EnemyMovement : MonoBehaviour
     {
         if(target != null)
         {
-            Debug.Log(PlayerDirection(target.transform.position));
             if (hasKnockback)
             {
                 return;

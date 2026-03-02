@@ -24,10 +24,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Attack stats")]
     //variables for attack size
-    public Vector2 attackSize;
-    public float attackDistance;
-    public float knockback;
-    public float attackSpeed;
+    public string weaponName;
+    public string weaponType;
+    public Weapon weapon;
     public LayerMask boxLayer;
     private bool canAttack = true;
 
@@ -43,8 +42,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        
-    }
+		weapon = new Weapon(weaponName, weaponType);
+        Debug.Log(weapon.baseAttackSize);
+	}
     private void FixedUpdate()
     {
         // adding acceleration to the directions
@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
             if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
             {
                 Debug.Log("attack succesful");
-                enemy.Hit(this, knockback);
+                enemy.Hit(this, weapon.baseKnockback);
             }
         }
     }
@@ -133,31 +133,32 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit2D MakeBoxCastAttack()
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
-        //Debug.Log(angleAsVector);
 
-        Vector2 position = angleAsVector * attackDistance;
+        Vector2 position = angleAsVector * weapon.baseAttackDistance;
 
-		return Physics2D.BoxCast(transform.position + (Vector3)position, attackSize, attackAngle, Vector2.zero,0,boxLayer);
+		return Physics2D.BoxCast(transform.position + (Vector3)position, weapon.baseAttackSize, attackAngle, Vector2.zero,0,boxLayer);
     }
     private IEnumerator Attack()
     {
         canAttack = false;
         // all this code is purely for visual during presentation, will be replaced with animator sprites from here
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
-        Vector2 position = angleAsVector * attackDistance;
+        Vector2 position = angleAsVector * weapon.baseAttackDistance;
         GameObject attack = Instantiate(attackVisual, transform.position + (Vector3)position, anchorTransform.rotation, anchorTransform);
-        attack.transform.localScale = attackSize;
+        attack.transform.localScale = weapon.baseAttackSize;
         // to here
         
         yield return new WaitForSeconds(0.1f);
         Destroy(attack);
-        yield return new WaitForSeconds(2/attackSpeed-0.1f);
+        yield return new WaitForSeconds(2/weapon.baseAttackSpeed-0.1f);
         canAttack = true;
     }
     private void OnDrawGizmos()
     {   
-        Gizmos.matrix = anchorTransform.localToWorldMatrix;
-        Gizmos.DrawWireCube(new Vector2(0,attackDistance), attackSize);
-        
+        if(weapon != null)
+        {
+            Gizmos.matrix = anchorTransform.localToWorldMatrix;
+            Gizmos.DrawWireCube(new Vector2(0,weapon.baseAttackDistance), weapon.baseAttackSize);
+        }
     }
 }
