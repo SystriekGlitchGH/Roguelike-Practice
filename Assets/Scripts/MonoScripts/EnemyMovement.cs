@@ -21,7 +21,7 @@ public class EnemyMovement : MonoBehaviour
     public float knockbackTime;
 
     //other
-    private float colliderPushForce = 4;
+    private float colliderPushForce = 8;
 
     private void Start()
     {
@@ -61,7 +61,7 @@ public class EnemyMovement : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             PlayerMovement pm = collision.GetComponent<PlayerMovement>();
-            pm.rb2d.AddForce(-pm.DirectionToVector()*colliderPushForce);
+            pm.rb2d.AddForce(PlayerDirection(pm.transform.position)*colliderPushForce);
         }
     }
     public void Die()
