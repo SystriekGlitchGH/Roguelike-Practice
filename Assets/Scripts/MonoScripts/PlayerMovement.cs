@@ -26,19 +26,21 @@ public class PlayerMovement : MonoBehaviour
     //variables for attack size
     public string weaponName;
     public string weaponType;
+    // tracks which weapon is currently held
+    public int weaponNum;
     public Weapon weapon;
     public LayerMask boxLayer;
     private bool canAttack = true;
-
-    [Header("Debugging Tools")]
-    [SerializeField] Transform anchorTransform;
-
     private float attackAngle;
     private enum Direction
     {
         North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest
     }
     private Direction playerDirection;
+    [Header("Debugging Tools")]
+    [SerializeField] Transform anchorTransform;
+
+    
 
     private void Awake()
     {
@@ -84,6 +86,29 @@ public class PlayerMovement : MonoBehaviour
             {
                 Debug.Log("attack succesful");
                 enemy.Hit(this, weapon.baseKnockback);
+            }
+        }
+    }
+    public void SwitchWeaponName(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            weaponNum++;
+            if(weaponNum == 1)
+            {
+                weaponName = "axe";
+                weapon = new Weapon(weaponName, weaponType);
+            }
+            else if(weaponNum == 2)
+            {
+                weaponName = "spear";
+                weapon = new Weapon(weaponName, weaponType);
+            }
+            else if(weaponNum == 3)
+            {
+                weaponNum = 0;
+                weaponName = "sword";
+                weapon = new Weapon(weaponName, weaponType);
             }
         }
     }
