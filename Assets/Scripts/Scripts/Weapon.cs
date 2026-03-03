@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class Weapon
 {
-	public string type;
-	public string name;
-	public float baseAttack;
-    public float baseAttackSpeed;
-    public float baseKnockback;
-    //only for melee
-    public Vector2 baseAttackSize;
-    public float baseAttackDistance;
+	public string type; // type of weapon: blade, gun, beam, summon
+	public string name; // name of the weapon: sword, shotgun, dual beam
+	public float baseAttack; // base attack of weapon
+    public float baseAttackSpeed; // base attack speed of weapon
+    public float baseKnockback; // base knockback of weapon
+    // only for melee
+    public Vector2 baseAttackSize; // size of melee weapon hitbox
+    public float baseAttackDistance; // distance away from player at center hitbox of melee weapon
+    // only for gun
+    public float bullets; // amount of bullets fired per shot input
+    public float pierce; // amount of enemies the bullets can hit before being destroyed
+    public float spread;
+
 
 	public Weapon(string n, string t)
     {
@@ -49,18 +54,25 @@ public class Weapon
                 baseAttack = 4;
                 baseAttackSpeed = 14;
                 baseKnockback = 4;
+                bullets = 1;
+                pierce = 2;
             }
             else if(n == "shotgun")
             {
 				baseAttack = 2;
 				baseAttackSpeed = 6;
-				baseKnockback = 10;
+				baseKnockback = 2;
+				bullets = 12;
+				pierce = 1;
+                spread = 30;
 			}
             else if(n == "sniper")
             {
 				baseAttack = 10;
 				baseAttackSpeed = 2;
-				baseKnockback = 14;
+				baseKnockback = 8;
+				bullets = 1;
+				pierce = 3;
 			}
         }
     }

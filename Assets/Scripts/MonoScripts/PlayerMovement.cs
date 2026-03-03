@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private int typeNum;
     private int weaponNum;
     public LayerMask boxLayer;
-    private Weapon weapon;
+    public Weapon weapon;
     private bool canAttack = true;
     private float attackAngle;
     private enum Direction
@@ -118,7 +118,17 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("attacked");
                 if(weaponName == "semiauto")
                 {
-                    SpawnBullet();
+                    SpawnBullet(0);
+                }
+                if(weaponName == "shotgun")
+                {
+                    float extraRotation = -weapon.spread / 2;
+                    
+                    for(int i = 0; i < weapon.bullets; i++)
+                    {
+                        SpawnBullet(extraRotation);
+                        extraRotation += weapon.spread / (weapon.bullets - 1);
+                    }
                 }
                 StartCoroutine(Attack());
             }
@@ -246,15 +256,18 @@ public class PlayerMovement : MonoBehaviour
 
 		return Physics2D.BoxCastAll(transform.position + (Vector3)position, weapon.baseAttackSize, attackAngle, Vector2.zero,0,boxLayer);
     }
-    private void SpawnBullet()
+    private void SpawnBullet(float xtraRotation)
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
-        GameObject shot = Instantiate(bullet, transform.position + (Vector3)angleAsVector, anchorTransform.rotation);
-        if(shot.TryGetComponent(out Bullet bt))
+        Vector3 rotation = anchorTransform.rotation.eulerAngles + new Vector3(0,0,xtraRotation);
+        GameObject shot = Instantiate(bullet, transform.position + (Vector3)angleAsVector, Quaternion.Euler(rotation));
+        if (shot.TryGetComponent(out Bullet bt))
+        {
+            bt.pm = this;
             bt.direction = DirectionToVector();
-            bt.knockback = weapon.baseKnockback;
-            bt.rb2d.AddForce(DirectionToVector()*800);
-        
+            bt.rb2d.AddForce(bt.rb2d.transform.up * 1600);
+            Debug.Log(bt.rb2d.transform.up);
+        }
     }
     private IEnumerator Attack()
     {

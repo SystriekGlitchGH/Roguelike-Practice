@@ -167,3 +167,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb2d: {fileID: 3701838300216252943}
+  pm: {fileID: 0}
+  direction: {x: 0, y: 0}
