@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     public string weaponType;
     public float spearLungeForce;
     private bool isLunging = false;
+    private bool inCombo = true;
     // tracks which weapon is currently held
     private int weaponNum;
     public LayerMask boxLayer;
@@ -88,6 +89,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(SpearLunge());
                 rb2d.AddForce(DirectionToVector()*spearLungeForce, ForceMode2D.Impulse);
+            }
+            if(weaponName == "axe" && inCombo)
+            {
+                StartCoroutine(Axe3Hit());
             }
             StartCoroutine(Attack());
             foreach (RaycastHit2D hit in hits)
@@ -194,6 +199,17 @@ public class PlayerMovement : MonoBehaviour
         isLunging = true;
         yield return new WaitForSeconds(0.2f);
         isLunging = false;
+    }
+    private IEnumerator Axe3Hit()
+    {
+        weapon.baseAttackSpeed = 10;
+        weapon.baseKnockback = 6;
+        yield return new WaitForSeconds(0.6f);
+        inCombo = false;
+        weapon.baseAttackSpeed = 2;
+        weapon.baseKnockback = 20;
+        yield return new WaitForSeconds(4);
+        inCombo = true;
     }
     private void OnDrawGizmos()
     {   

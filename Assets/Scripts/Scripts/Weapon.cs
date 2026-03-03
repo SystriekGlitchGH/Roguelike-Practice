@@ -28,7 +28,7 @@ public class Weapon
             else if(n == "axe")
             {
 				baseAttack = 8;
-				baseAttackSpeed = 3;
+				baseAttackSpeed = 2;
 				baseKnockback = 20;
 				baseAttackSize = new Vector2(3.5f, 2);
 				baseAttackDistance = 2f;
@@ -37,7 +37,7 @@ public class Weapon
             {
 				baseAttack = 5;
 				baseAttackSpeed = 4f;
-				baseKnockback = 12;
+				baseKnockback = 8;
 				baseAttackSize = new Vector2(2f, 4);
 				baseAttackDistance = 3f;
 			}

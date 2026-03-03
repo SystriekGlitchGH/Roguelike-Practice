@@ -1234,7 +1234,7 @@ MonoBehaviour:
   friction: 8
   weaponName: sword
   weaponType: blade
-  weaponNum: 0
+  spearLungeForce: 20
   boxLayer:
     serializedVersion: 2
     m_Bits: 64
