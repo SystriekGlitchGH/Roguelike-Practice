@@ -45,7 +45,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
 		weapon = new Weapon(weaponName, weaponType);
-        Debug.Log(weapon.baseAttackSize);
 	}
     private void FixedUpdate()
     {
@@ -84,23 +83,29 @@ public class PlayerMovement : MonoBehaviour
             return;
         if(ctx.performed && canAttack)
         {
-            RaycastHit2D[] hits = MakeBoxCastAttack();
-            if (weaponName == "spear")
+            if(weaponType == "blade")
             {
-                StartCoroutine(SpearLunge());
-                rb2d.AddForce(DirectionToVector()*spearLungeForce, ForceMode2D.Impulse);
-            }
-            if(weaponName == "axe" && inCombo)
-            {
-                StartCoroutine(Axe3Hit());
-            }
-            StartCoroutine(Attack());
-            foreach (RaycastHit2D hit in hits)
-            {
-                if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
+                RaycastHit2D[] hits = MakeBoxCastAttack();
+                // makes the dash when attacking as spear
+                if (weaponName == "spear")
                 {
-                    Debug.Log("attack succesful");
-                    enemy.Hit(this, weapon.baseKnockback);
+                    StartCoroutine(SpearLunge());
+                    rb2d.AddForce(DirectionToVector()*spearLungeForce, ForceMode2D.Impulse);
+                }
+                // starts the axe combo timer
+                if(weaponName == "axe" && inCombo)
+                {
+                    StartCoroutine(Axe3Hit());
+                }
+                // detecting and delivering hits
+                StartCoroutine(Attack());
+                foreach (RaycastHit2D hit in hits)
+                {
+                    if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
+                    {
+                        Debug.Log("attack succesful");
+                        enemy.Hit(this, weapon.baseKnockback);
+                    }
                 }
             }
             
