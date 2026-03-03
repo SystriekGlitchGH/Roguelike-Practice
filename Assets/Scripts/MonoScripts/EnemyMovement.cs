@@ -48,7 +48,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 rb2d.linearDamping = friction;
             }
-            if(distance > 20)
+            if(distance > 40)
             {
                 target = null;
                 rb2d.linearDamping = friction;

@@ -77,13 +77,17 @@ public class PlayerMovement : MonoBehaviour
             return;
         if(ctx.performed && canAttack)
         {
-            RaycastHit2D hit = MakeBoxCastAttack();
+            RaycastHit2D[] hits = MakeBoxCastAttack();
             StartCoroutine(Attack());
-            if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
+            foreach (RaycastHit2D hit in hits)
             {
-                Debug.Log("attack succesful");
-                enemy.Hit(this, weapon.baseKnockback);
+                if (hit && hit.rigidbody.TryGetComponent(out EnemyMovement enemy))
+                {
+                    Debug.Log("attack succesful");
+                    enemy.Hit(this, weapon.baseKnockback);
+                }
             }
+            
         }
     }
     public void SwitchWeaponName(InputAction.CallbackContext ctx)
@@ -152,13 +156,13 @@ public class PlayerMovement : MonoBehaviour
         if(playerDirection == Direction.SouthWest) return new Vector2(-0.7071f,-0.7071f);
         return new Vector2(0,0);
     }
-    private RaycastHit2D MakeBoxCastAttack()
+    private RaycastHit2D[] MakeBoxCastAttack()
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
 
         Vector2 position = angleAsVector * weapon.baseAttackDistance;
 
-		return Physics2D.BoxCast(transform.position + (Vector3)position, weapon.baseAttackSize, attackAngle, Vector2.zero,0,boxLayer);
+		return Physics2D.BoxCastAll(transform.position + (Vector3)position, weapon.baseAttackSize, attackAngle, Vector2.zero,0,boxLayer);
     }
     private IEnumerator Attack()
     {
