@@ -39,9 +39,6 @@ public class PlayerMovement : MonoBehaviour
     private Direction playerDirection;
     [Header("Debugging Tools")]
     [SerializeField] Transform anchorTransform;
-
-    
-
     private void Awake()
     {
 		weapon = new Weapon(weaponName, weaponType);

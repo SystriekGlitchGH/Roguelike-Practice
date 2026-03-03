@@ -62,6 +62,11 @@ public class EnemyMovement : MonoBehaviour
             PlayerMovement pm = collision.GetComponent<PlayerMovement>();
             pm.rb2d.AddForce(PlayerDirection(pm.transform.position)*colliderPushForce);
         }
+        else if (collision.CompareTag("Enemy"))
+        {
+            EnemyMovement em = collision.GetComponent<EnemyMovement>();
+            em.rb2d.AddForce(PlayerDirection(em.transform.position)*colliderPushForce);
+        }
     }
     public void Die()
     {
