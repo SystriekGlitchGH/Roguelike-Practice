@@ -23,13 +23,15 @@ public class PlayerMovement : MonoBehaviour
     private float directionX, directionY;
 
     [Header("Attack stats")]
-    //variables for attack size
+    //variables for which weapon you are holding
     public string weaponName;
     public string weaponType;
+    public float spearLungeForce;
+    private bool isLunging = false;
     // tracks which weapon is currently held
-    public int weaponNum;
-    public Weapon weapon;
+    private int weaponNum;
     public LayerMask boxLayer;
+    private Weapon weapon;
     private bool canAttack = true;
     private float attackAngle;
     private enum Direction
@@ -46,6 +48,11 @@ public class PlayerMovement : MonoBehaviour
 	}
     private void FixedUpdate()
     {
+        if (isLunging)
+        {
+            rb2d.linearDamping = 0;
+            return;
+        }
         // adding acceleration to the directions
         Vector2 newVelocity = new Vector2(directionX * acceleration, directionY * acceleration);
         // adding the force to the rigidbody2d
@@ -70,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
         directionX = ctx.ReadValue<Vector2>().x;
         directionY = ctx.ReadValue<Vector2>().y;
     }
-
     public void Attack(InputAction.CallbackContext ctx)
     {
         if(ctx.ReadValue<float>() == 0)
@@ -78,6 +84,11 @@ public class PlayerMovement : MonoBehaviour
         if(ctx.performed && canAttack)
         {
             RaycastHit2D[] hits = MakeBoxCastAttack();
+            if (weaponName == "spear")
+            {
+                StartCoroutine(SpearLunge());
+                rb2d.AddForce(DirectionToVector()*spearLungeForce, ForceMode2D.Impulse);
+            }
             StartCoroutine(Attack());
             foreach (RaycastHit2D hit in hits)
             {
@@ -113,7 +124,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     private void FindAngle()
     {
         if(playerDirection == Direction.North) attackAngle = 0;
@@ -178,6 +188,12 @@ public class PlayerMovement : MonoBehaviour
         Destroy(attack);
         yield return new WaitForSeconds(2/weapon.baseAttackSpeed-0.1f);
         canAttack = true;
+    }
+    private IEnumerator SpearLunge()
+    {
+        isLunging = true;
+        yield return new WaitForSeconds(0.2f);
+        isLunging = false;
     }
     private void OnDrawGizmos()
     {   
