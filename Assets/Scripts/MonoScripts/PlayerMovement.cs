@@ -6,8 +6,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //Non-Permenant components
+    //Non-Permanant components
     [SerializeField] GameObject attackVisual;
+    [SerializeField] GameObject bullet;
+
+    //Permanent components
 
     [Header("Components")]
     public Rigidbody2D rb2d;
@@ -30,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isLunging = false;
     private bool inCombo = true;
     // tracks which weapon is currently held
+    private int typeNum;
     private int weaponNum;
     public LayerMask boxLayer;
     private Weapon weapon;
@@ -40,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
         North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest
     }
     private Direction playerDirection;
+
     [Header("Debugging Tools")]
     [SerializeField] Transform anchorTransform;
     private void Awake()
@@ -108,7 +113,12 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
-            
+            else if(weaponType == "gun")
+            {
+                Debug.Log("attacked");
+                SpawnBullet();
+                StartCoroutine(Attack());
+            }
         }
     }
     public void SwitchWeaponName(InputAction.CallbackContext ctx)
@@ -116,19 +126,68 @@ public class PlayerMovement : MonoBehaviour
         if (ctx.performed)
         {
             weaponNum++;
-            if(weaponNum == 1)
+            if (typeNum == 0)
             {
-                weaponName = "axe";
+                if(weaponNum == 1)
+                {
+                    weaponName = "axe";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+                else if(weaponNum == 2)
+                {
+                    weaponName = "spear";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+                else if(weaponNum == 3)
+                {
+                    weaponNum = 0;
+                    weaponName = "sword";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+            }
+            else if(typeNum == 1)
+            {
+                if(weaponNum == 1)
+                {
+                    weaponName = "shotgun";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+                else if(weaponNum == 2)
+                {
+                    weaponName = "sniper";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+                else if(weaponNum == 3)
+                {
+                    weaponNum = 0;
+                    weaponName = "semiauto";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+            }
+        }
+    }
+    public void SwitchWeaponType(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            weaponNum = 0;
+            typeNum++;
+            if(typeNum == 1)
+            {
+                weaponType = "gun";
+                weaponName = "semiauto";
                 weapon = new Weapon(weaponName, weaponType);
             }
-            else if(weaponNum == 2)
+            else if(typeNum == 2)
             {
-                weaponName = "spear";
+                weaponType = "beam";
+                weaponName = "single";
                 weapon = new Weapon(weaponName, weaponType);
             }
-            else if(weaponNum == 3)
+            else if(typeNum == 3)
             {
-                weaponNum = 0;
+                typeNum = 0;
+                weaponType = "blade";
                 weaponName = "sword";
                 weapon = new Weapon(weaponName, weaponType);
             }
@@ -183,6 +242,14 @@ public class PlayerMovement : MonoBehaviour
         Vector2 position = angleAsVector * weapon.baseAttackDistance;
 
 		return Physics2D.BoxCastAll(transform.position + (Vector3)position, weapon.baseAttackSize, attackAngle, Vector2.zero,0,boxLayer);
+    }
+    private void SpawnBullet()
+    {
+        Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
+        GameObject shot = Instantiate(bullet, transform.position + (Vector3)angleAsVector, anchorTransform.rotation);
+        if(shot.TryGetComponent(out Bullet bt))
+            bt.rb2d.AddForce(DirectionToVector()*400);
+        
     }
     private IEnumerator Attack()
     {

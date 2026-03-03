@@ -42,5 +42,26 @@ public class Weapon
 				baseAttackDistance = 3f;
 			}
         }
+        if (t == "gun")
+        {
+            if(n == "semiauto")
+            {
+                baseAttack = 4;
+                baseAttackSpeed = 10;
+                baseKnockback = 4;
+            }
+            else if(n == "shotgun")
+            {
+				baseAttack = 2;
+				baseAttackSpeed = 6;
+				baseKnockback = 10;
+			}
+            else if(n == "sniper")
+            {
+				baseAttack = 10;
+				baseAttackSpeed = 2;
+				baseKnockback = 14;
+			}
+        }
     }
 }
