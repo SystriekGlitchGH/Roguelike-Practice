@@ -47,7 +47,7 @@ public class Weapon
             if(n == "semiauto")
             {
                 baseAttack = 4;
-                baseAttackSpeed = 10;
+                baseAttackSpeed = 14;
                 baseKnockback = 4;
             }
             else if(n == "shotgun")

@@ -77,6 +77,11 @@ public class EnemyMovement : MonoBehaviour
         StartCoroutine(GetHit());
         rb2d.AddForce(attacker.DirectionToVector()*knockback,ForceMode2D.Impulse);
     }
+    public void Hit(Bullet attacker, float knockback)
+    {
+        StartCoroutine(GetHit());
+        rb2d.AddForce(attacker.direction*knockback,ForceMode2D.Impulse);
+    }
 
     private IEnumerator GetHit()
     {

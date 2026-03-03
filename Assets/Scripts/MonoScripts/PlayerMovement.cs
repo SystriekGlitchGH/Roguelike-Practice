@@ -116,7 +116,10 @@ public class PlayerMovement : MonoBehaviour
             else if(weaponType == "gun")
             {
                 Debug.Log("attacked");
-                SpawnBullet();
+                if(weaponName == "semiauto")
+                {
+                    SpawnBullet();
+                }
                 StartCoroutine(Attack());
             }
         }
@@ -248,7 +251,9 @@ public class PlayerMovement : MonoBehaviour
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
         GameObject shot = Instantiate(bullet, transform.position + (Vector3)angleAsVector, anchorTransform.rotation);
         if(shot.TryGetComponent(out Bullet bt))
-            bt.rb2d.AddForce(DirectionToVector()*400);
+            bt.direction = DirectionToVector();
+            bt.knockback = weapon.baseKnockback;
+            bt.rb2d.AddForce(DirectionToVector()*800);
         
     }
     private IEnumerator Attack()
