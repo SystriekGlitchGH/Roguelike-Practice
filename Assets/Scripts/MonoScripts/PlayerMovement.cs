@@ -17,8 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     public Rigidbody2D rb2d;
     [SerializeField] SpriteRenderer spriteRend;
+	[SerializeField] Transform anchorTransform;
 
-    [Header("Movement stats")]
+	[Header("Movement stats")]
     // actual stats for how the player moves
     public float acceleration;
     public float topSpeed;
@@ -49,9 +50,6 @@ public class PlayerMovement : MonoBehaviour
         North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest
     }
     private Direction playerDirection;
-
-    [Header("Debugging Tools")]
-    [SerializeField] Transform anchorTransform;
     private void Awake()
     {
 		weapon = new Weapon(weaponName, weaponType);
@@ -89,8 +87,13 @@ public class PlayerMovement : MonoBehaviour
         }
         else if(weaponName == "single" && buttonHeld && canAttack)
         {
-            SpawnBeam(0);
-            StartCoroutine(Attack());
+			Vector2 minPos = anchorTransform.position - anchorTransform.right * weapon.width;
+			Vector2 maxPos = anchorTransform.position + anchorTransform.right * weapon.width;
+			Vector2 pos = Vector2.Lerp(minPos, maxPos, rand.Next(0, 100) / 100f);
+			SpawnBeam(pos);
+			SpawnBeam(pos);
+			SpawnBeam(pos);
+			StartCoroutine(Attack());
         }
     }
     public void Move(InputAction.CallbackContext ctx)
@@ -157,8 +160,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(weaponName == "single")
                 {
-                    SpawnBeam(0);
-                }
+					Vector2 minPos = anchorTransform.position - anchorTransform.right * weapon.width;
+					Vector2 maxPos = anchorTransform.position + anchorTransform.right * weapon.width;
+                    Vector2[] positions = new Vector2[3];
+                    for(int i = 0; i < positions.Length; i++)
+                    {
+                        positions[i] = Vector2.Lerp(minPos, maxPos, rand.Next(0, 100) / 100f);
+                        SpawnBeam(positions[i]);
+					}
+				}
                 StartCoroutine(Attack());
             }
         }
@@ -299,15 +309,15 @@ public class PlayerMovement : MonoBehaviour
             bt.rb2d.AddForce(bt.rb2d.transform.up * 2000);
         }
     }
-    private void SpawnBeam(float leftRight)
+    private void SpawnBeam(Vector2 leftRight)
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
-        GameObject shot = Instantiate(flare, transform.position + (Vector3)angleAsVector, anchorTransform.rotation);
+        GameObject shot = Instantiate(flare, (Vector3)angleAsVector + (Vector3)leftRight, anchorTransform.rotation);
         if (shot.TryGetComponent(out Bullet bt))
         {
             bt.pm = this;
             bt.direction = DirectionToVector();
-            bt.rb2d.AddForce(bt.rb2d.transform.up * 2500);
+            bt.rb2d.AddForce(bt.rb2d.transform.up * 2200);
         }
     }
     private IEnumerator Attack()

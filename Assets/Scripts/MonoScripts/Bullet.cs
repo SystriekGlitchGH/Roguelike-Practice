@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         elapsedTime += Time.deltaTime;
-        if(elapsedTime > 4)
+        if(elapsedTime > 3)
         {
             Destroy(gameObject);
         }

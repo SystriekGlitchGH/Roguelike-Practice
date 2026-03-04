@@ -14,6 +14,8 @@ public class Weapon
     public float bullets; // amount of bullets fired per shot input
     public float pierce; // amount of enemies the bullets can hit before being destroyed
     public float spread;
+    // only for tome
+    public float width;
 
 
 	public Weapon(string n, string t)
@@ -84,6 +86,7 @@ public class Weapon
                 baseAttackSpeed = 16;
                 baseKnockback = 2;
                 pierce = 20;
+                width = 1.5f;
             }
             else if(n == "spread")
             {
@@ -91,6 +94,7 @@ public class Weapon
 				baseAttackSpeed = 6;
 				baseKnockback = 2;
                 pierce = 20;
+                width = 1f;
 			}
             else if(n == "point")
             {
@@ -98,6 +102,7 @@ public class Weapon
 				baseAttackSpeed = 2;
 				baseKnockback = 1;
                 pierce = 20;
+                width = 1.2f;
 			}
         }
     }
