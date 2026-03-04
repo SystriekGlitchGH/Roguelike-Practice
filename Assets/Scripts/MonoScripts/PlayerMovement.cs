@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     //Non-Permanant components
     [SerializeField] GameObject attackVisual;
     [SerializeField] GameObject bullet;
+    [SerializeField] GameObject flare;
 
     //Permanent components
 
@@ -86,6 +87,11 @@ public class PlayerMovement : MonoBehaviour
             SpawnBullet(extraRotation);
             StartCoroutine(Attack());
         }
+        else if(weaponName == "single" && buttonHeld && canAttack)
+        {
+            SpawnBeam(0);
+            StartCoroutine(Attack());
+        }
     }
     public void Move(InputAction.CallbackContext ctx)
     {
@@ -151,8 +157,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(weaponName == "single")
                 {
-                    
+                    SpawnBeam(0);
                 }
+                StartCoroutine(Attack());
             }
         }
         if (ctx.ReadValue<float>() == 0)
@@ -219,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if(typeNum == 2)
             {
-                weaponType = "beam";
+                weaponType = "tome";
                 weaponName = "single";
                 weapon = new Weapon(weaponName, weaponType);
             }
@@ -277,9 +284,7 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit2D[] MakeBoxCastAttack()
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
-
         Vector2 position = angleAsVector * weapon.baseAttackDistance;
-
 		return Physics2D.BoxCastAll(transform.position + (Vector3)position, weapon.baseAttackSize, attackAngle, Vector2.zero,0,boxLayer);
     }
     private void SpawnBullet(float xtraRotation)
@@ -292,6 +297,17 @@ public class PlayerMovement : MonoBehaviour
             bt.pm = this;
             bt.direction = DirectionToVector();
             bt.rb2d.AddForce(bt.rb2d.transform.up * 2000);
+        }
+    }
+    private void SpawnBeam(float leftRight)
+    {
+        Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
+        GameObject shot = Instantiate(flare, transform.position + (Vector3)angleAsVector, anchorTransform.rotation);
+        if (shot.TryGetComponent(out Bullet bt))
+        {
+            bt.pm = this;
+            bt.direction = DirectionToVector();
+            bt.rb2d.AddForce(bt.rb2d.transform.up * 2500);
         }
     }
     private IEnumerator Attack()

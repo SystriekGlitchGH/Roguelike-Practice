@@ -10,7 +10,7 @@ public class Weapon
     // only for melee
     public Vector2 baseAttackSize; // size of melee weapon hitbox
     public float baseAttackDistance; // distance away from player at center hitbox of melee weapon
-    // only for gun
+    // only for gun, except pierce
     public float bullets; // amount of bullets fired per shot input
     public float pierce; // amount of enemies the bullets can hit before being destroyed
     public float spread;
@@ -81,20 +81,23 @@ public class Weapon
             if(n == "single")
             {
                 baseAttack = 2;
-                baseAttackSpeed = 10;
-                baseKnockback = 42;
+                baseAttackSpeed = 16;
+                baseKnockback = 2;
+                pierce = 20;
             }
             else if(n == "spread")
             {
 				baseAttack = 1;
 				baseAttackSpeed = 6;
 				baseKnockback = 2;
+                pierce = 20;
 			}
             else if(n == "point")
             {
 				baseAttack = 1.5f;
 				baseAttackSpeed = 2;
 				baseKnockback = 1;
+                pierce = 20;
 			}
         }
     }

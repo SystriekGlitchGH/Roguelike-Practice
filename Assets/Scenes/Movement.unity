@@ -941,6 +941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackVisual: {fileID: 3956911121127704462, guid: aa4d57817d690fa4397252751d838b91, type: 3}
   bullet: {fileID: 5857040398265091631, guid: a1c804ac3dff23c478f2f8359ce7e22d, type: 3}
+  flare: {fileID: 3960288762969647054, guid: b9322b219e2061d41a9fce63b967b5d3, type: 3}
   rb2d: {fileID: 1595963281}
   spriteRend: {fileID: 1595963282}
   acceleration: 90
