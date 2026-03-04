@@ -49,13 +49,14 @@ public class Weapon
         }
         if (t == "gun")
         {
-            if(n == "semiauto")
+            if(n == "auto")
             {
                 baseAttack = 4;
-                baseAttackSpeed = 14;
+                baseAttackSpeed = 8;
                 baseKnockback = 4;
                 bullets = 1;
                 pierce = 2;
+                spread = 10;
             }
             else if(n == "shotgun")
             {

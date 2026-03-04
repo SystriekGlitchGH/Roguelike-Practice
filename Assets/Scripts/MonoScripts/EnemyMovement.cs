@@ -81,6 +81,7 @@ public class EnemyMovement : MonoBehaviour
     {
         StartCoroutine(GetHit());
         rb2d.AddForce(attacker.direction*knockback,ForceMode2D.Impulse);
+        target = attacker.pm;
     }
 
     private IEnumerator GetHit()

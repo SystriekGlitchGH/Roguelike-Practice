@@ -6,7 +6,16 @@ public class Bullet : MonoBehaviour
     public PlayerMovement pm;
     public Vector2 direction;
     private int enemiesHit;
-    void OnTriggerEnter2D(Collider2D collision)
+    float elapsedTime = Time.deltaTime;
+    private void Update()
+    {
+        elapsedTime += Time.deltaTime;
+        if(elapsedTime > 4)
+        {
+            Destroy(gameObject);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
         {

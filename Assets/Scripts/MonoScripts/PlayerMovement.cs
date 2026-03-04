@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = System.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -37,8 +38,11 @@ public class PlayerMovement : MonoBehaviour
     private int weaponNum;
     public LayerMask boxLayer;
     public Weapon weapon;
+    // tracks if you're attacking or not, and how you are attacking
     private bool canAttack = true;
+    private bool buttonHeld;
     private float attackAngle;
+    Random rand = new Random();
     private enum Direction
     {
         North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest
@@ -75,6 +79,13 @@ public class PlayerMovement : MonoBehaviour
         FindDirection();
         FindAngle();
         anchorTransform.eulerAngles = new Vector3(0,0,attackAngle);
+        if(weaponName == "auto" && buttonHeld && canAttack)
+        {
+            float extraRotation = -weapon.spread/2;
+            extraRotation += weapon.spread / (6 - 1) * rand.Next(1,6);
+            SpawnBullet(extraRotation);
+            StartCoroutine(Attack());
+        }
     }
     public void Move(InputAction.CallbackContext ctx)
     {
@@ -84,10 +95,9 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Attack(InputAction.CallbackContext ctx)
     {
-        if(ctx.ReadValue<float>() == 0)
-            return;
-        if(ctx.performed && canAttack)
+        if(ctx.ReadValue<float>() == 1 && canAttack)
         {
+            buttonHeld = true;
             if(weaponType == "blade")
             {
                 RaycastHit2D[] hits = MakeBoxCastAttack();
@@ -115,10 +125,11 @@ public class PlayerMovement : MonoBehaviour
             }
             else if(weaponType == "gun")
             {
-                Debug.Log("attacked");
-                if(weaponName == "semiauto")
+                if(weaponName == "auto")
                 {
-                    SpawnBullet(0);
+                    float extraRotation = -weapon.spread/2;
+                    extraRotation += weapon.spread / (6 - 1) * rand.Next(1,6);
+                    SpawnBullet(extraRotation);
                 }
                 if(weaponName == "shotgun")
                 {
@@ -132,6 +143,10 @@ public class PlayerMovement : MonoBehaviour
                 }
                 StartCoroutine(Attack());
             }
+        }
+        if (ctx.ReadValue<float>() == 0)
+        {
+            buttonHeld = false;
         }
     }
     public void SwitchWeaponName(InputAction.CallbackContext ctx)
@@ -173,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
                 else if(weaponNum == 3)
                 {
                     weaponNum = 0;
-                    weaponName = "semiauto";
+                    weaponName = "auto";
                     weapon = new Weapon(weaponName, weaponType);
                 }
             }
@@ -188,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
             if(typeNum == 1)
             {
                 weaponType = "gun";
-                weaponName = "semiauto";
+                weaponName = "auto";
                 weapon = new Weapon(weaponName, weaponType);
             }
             else if(typeNum == 2)
@@ -266,7 +281,6 @@ public class PlayerMovement : MonoBehaviour
             bt.pm = this;
             bt.direction = DirectionToVector();
             bt.rb2d.AddForce(bt.rb2d.transform.up * 1600);
-            Debug.Log(bt.rb2d.transform.up);
         }
     }
     private IEnumerator Attack()
