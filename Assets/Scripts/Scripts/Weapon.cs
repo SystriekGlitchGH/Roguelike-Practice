@@ -52,7 +52,7 @@ public class Weapon
             if(n == "auto")
             {
                 baseAttack = 4;
-                baseAttackSpeed = 8;
+                baseAttackSpeed = 10;
                 baseKnockback = 4;
                 bullets = 1;
                 pierce = 2;
@@ -73,7 +73,28 @@ public class Weapon
 				baseAttackSpeed = 2;
 				baseKnockback = 8;
 				bullets = 1;
-				pierce = 3;
+				pierce = 5;
+			}
+        }
+        if (t == "tome")
+        {
+            if(n == "single")
+            {
+                baseAttack = 2;
+                baseAttackSpeed = 10;
+                baseKnockback = 42;
+            }
+            else if(n == "spread")
+            {
+				baseAttack = 1;
+				baseAttackSpeed = 6;
+				baseKnockback = 2;
+			}
+            else if(n == "point")
+            {
+				baseAttack = 1.5f;
+				baseAttackSpeed = 2;
+				baseKnockback = 1;
 			}
         }
     }

@@ -141,7 +141,18 @@ public class PlayerMovement : MonoBehaviour
                         extraRotation += weapon.spread / (weapon.bullets - 1);
                     }
                 }
+                if(weaponName == "sniper")
+                {
+                    SpawnBullet(0);
+                }
                 StartCoroutine(Attack());
+            }
+            else if (weaponType == "tome")
+            {
+                if(weaponName == "single")
+                {
+                    
+                }
             }
         }
         if (ctx.ReadValue<float>() == 0)
@@ -280,7 +291,7 @@ public class PlayerMovement : MonoBehaviour
         {
             bt.pm = this;
             bt.direction = DirectionToVector();
-            bt.rb2d.AddForce(bt.rb2d.transform.up * 1600);
+            bt.rb2d.AddForce(bt.rb2d.transform.up * 2000);
         }
     }
     private IEnumerator Attack()

@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     public PlayerMovement pm;
     public Vector2 direction;
     private int enemiesHit;
-    float elapsedTime = Time.deltaTime;
+    private float elapsedTime;
     private void Update()
     {
         elapsedTime += Time.deltaTime;
