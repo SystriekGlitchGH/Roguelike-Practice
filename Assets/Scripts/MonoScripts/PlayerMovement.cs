@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb2d;
     [SerializeField] SpriteRenderer spriteRend;
 	[SerializeField] Transform anchorTransform;
+    [SerializeField] Transform anchorTransformR;
+    [SerializeField] Transform anchorTransformL;
 
 	[Header("Movement stats")]
     // actual stats for how the player moves
@@ -87,13 +89,21 @@ public class PlayerMovement : MonoBehaviour
         }
         else if(weaponName == "single" && buttonHeld && canAttack)
         {
-			Vector2 minPos = anchorTransform.position - anchorTransform.right * weapon.width;
-			Vector2 maxPos = anchorTransform.position + anchorTransform.right * weapon.width;
-			Vector2 pos = Vector2.Lerp(minPos, maxPos, rand.Next(0, 100) / 100f);
-			SpawnBeam(pos);
-			SpawnBeam(pos);
-			SpawnBeam(pos);
+			BeamAttack(0,0);
 			StartCoroutine(Attack());
+        }
+        else if(weaponName == "spread" && buttonHeld && canAttack)
+        {
+            BeamAttack(0,0);
+            BeamAttack(30,0);
+            BeamAttack(-30,0);
+            StartCoroutine(Attack());
+        }
+        else if(weaponName == "point" && buttonHeld && canAttack)
+        {
+            BeamAttack(-30,1);
+            BeamAttack(30,2);
+            StartCoroutine(Attack());
         }
     }
     public void Move(InputAction.CallbackContext ctx)
@@ -160,15 +170,19 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(weaponName == "single")
                 {
-					Vector2 minPos = anchorTransform.position - anchorTransform.right * weapon.width;
-					Vector2 maxPos = anchorTransform.position + anchorTransform.right * weapon.width;
-                    Vector2[] positions = new Vector2[3];
-                    for(int i = 0; i < positions.Length; i++)
-                    {
-                        positions[i] = Vector2.Lerp(minPos, maxPos, rand.Next(0, 100) / 100f);
-                        SpawnBeam(positions[i]);
-					}
+					BeamAttack(0,0);
 				}
+                if(weaponName == "spread")
+                {
+                    BeamAttack(0,0);
+                    BeamAttack(30,0);
+                    BeamAttack(-30,0);
+                }
+                if(weaponName == "point")
+                {
+                    BeamAttack(-30,1);
+                    BeamAttack(30,2);
+                }
                 StartCoroutine(Attack());
             }
         }
@@ -217,6 +231,25 @@ public class PlayerMovement : MonoBehaviour
                 {
                     weaponNum = 0;
                     weaponName = "auto";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+            }
+            else if(typeNum == 2)
+            {
+                if(weaponNum == 1)
+                {
+                    weaponName = "spread";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+                else if(weaponNum == 2)
+                {
+                    weaponName = "point";
+                    weapon = new Weapon(weaponName, weaponType);
+                }
+                else if(weaponNum == 3)
+                {
+                    weaponNum = 0;
+                    weaponName = "single";
                     weapon = new Weapon(weaponName, weaponType);
                 }
             }
@@ -309,16 +342,44 @@ public class PlayerMovement : MonoBehaviour
             bt.rb2d.AddForce(bt.rb2d.transform.up * 2000);
         }
     }
-    private void SpawnBeam(Vector2 leftRight)
+    private void SpawnBeam(Vector2 leftRight, float xtraRotation)
     {
         Vector2 angleAsVector = new(-Mathf.Sin(Mathf.Deg2Rad * attackAngle), Mathf.Cos(Mathf.Deg2Rad * attackAngle));
-        GameObject shot = Instantiate(flare, (Vector3)angleAsVector + (Vector3)leftRight, anchorTransform.rotation);
+        Vector3 rotation = anchorTransform.rotation.eulerAngles + new Vector3(0,0,xtraRotation);
+        GameObject shot = Instantiate(flare, (Vector3)angleAsVector + (Vector3)leftRight, Quaternion.Euler(rotation));
         if (shot.TryGetComponent(out Bullet bt))
         {
             bt.pm = this;
             bt.direction = DirectionToVector();
             bt.rb2d.AddForce(bt.rb2d.transform.up * 2200);
         }
+    }
+    private void BeamAttack(float rotation, int type)
+    {
+        Vector2 minPos;
+        Vector2 maxPos;
+        if(type == 1)
+        {
+            minPos = anchorTransformL.position - anchorTransformL.right * weapon.width;
+		    maxPos = anchorTransformL.position + anchorTransformL.right * weapon.width;
+        }
+        else if(type == 2)
+        {
+            minPos = anchorTransformR.position - anchorTransformR.right * weapon.width;
+		    maxPos = anchorTransformR.position + anchorTransformR.right * weapon.width;
+        }
+        else
+        {
+            minPos = anchorTransform.position - anchorTransform.right * weapon.width;
+		    maxPos = anchorTransform.position + anchorTransform.right * weapon.width;
+        }
+        
+        Vector2[] positions = new Vector2[2];
+        for(int i = 0; i < positions.Length; i++)
+        {
+            positions[i] = Vector2.Lerp(minPos, maxPos, rand.Next(0, 100) / 100f);
+            SpawnBeam(positions[i],rotation);
+		}
     }
     private IEnumerator Attack()
     {

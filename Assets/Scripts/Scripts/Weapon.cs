@@ -84,22 +84,22 @@ public class Weapon
             {
                 baseAttack = 2;
                 baseAttackSpeed = 16;
-                baseKnockback = 2;
+                baseKnockback = 1;
                 pierce = 20;
                 width = 1.5f;
             }
             else if(n == "spread")
             {
 				baseAttack = 1;
-				baseAttackSpeed = 6;
-				baseKnockback = 2;
+				baseAttackSpeed = 16;
+				baseKnockback = 1;
                 pierce = 20;
                 width = 1f;
 			}
             else if(n == "point")
             {
 				baseAttack = 1.5f;
-				baseAttackSpeed = 2;
+				baseAttackSpeed = 16;
 				baseKnockback = 1;
                 pierce = 20;
                 width = 1.2f;
