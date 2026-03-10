@@ -78,7 +78,9 @@ public class EnemyMovement : MonoBehaviour
     }
     public void Hit(Bullet attacker, float knockback)
     {
+        Debug.Log("Hit");
         StartCoroutine(GetHit());
+        Debug.Log("Hit2");
         rb2d.AddForce(attacker.direction*knockback,ForceMode2D.Impulse);
         target = attacker.pm;
     }
